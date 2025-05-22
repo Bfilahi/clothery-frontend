@@ -1,0 +1,25 @@
+@mixin respond($property, $breakpoint){
+    @if $breakpoint == phone-sm {
+        @media ($property: 27.5em) { @content }; // 440px
+    }
+
+    @if $breakpoint == phone {
+        @media ($property: 34.375em) { @content }; // 550px
+    }
+
+    @if $breakpoint == tab-portrait-sm {
+        @media ($property: 48.125em) { @content }; // 770px
+    }
+
+    @if $breakpoint == tab-portrait-lg {
+        @media ($property: 56.25em) { @content }; // 900px
+    }
+
+    @if $breakpoint == tab-landscape {
+        @media ($property: 75em) { @content }; // 1200px
+    }
+    
+    @if $breakpoint == big-desktop {
+        @media ($property: 112.5em) { @content }; // 1800px
+    }
+}

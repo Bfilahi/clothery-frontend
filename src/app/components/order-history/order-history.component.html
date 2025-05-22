@@ -1,0 +1,51 @@
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="line-spin-fade">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
+
+
+<div class="section__container">
+  <div class="content">
+    <div class="container">
+      <h2>Order History</h2>
+
+      <div *ngIf="error" style="text-align: center; font-size: 1.7em;">
+        {{ error }}
+      </div>
+
+      <div *ngIf="!isLoading && !error && orders.length === 0" style="text-align: center; font-size: 1.7em;">
+        You haven't placed any orders yet.
+      </div>
+
+      <div *ngIf="!isLoading && !error && orders.length > 0" class="order-history__container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Order Tracking Number</th>
+              <th>Total Price</th>
+              <th>Total Quantity</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of orders">
+              <td>{{ order.orderTrackingNumber }}</td>
+              <td>{{ order.totalPrice | currency:'EUR' }}</td>
+              <td>{{ order.totalQuantity }}</td>
+              <td>{{ formatDate(order.dateCreated) }}</td>
+              <td>
+                <button class="btn" (click)="viewOrderDetails(order.id)">
+                  View Details
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

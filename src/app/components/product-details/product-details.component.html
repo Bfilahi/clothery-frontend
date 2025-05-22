@@ -1,0 +1,224 @@
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="line-spin-fade">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
+
+
+<div class="section__container">
+    <div class="left__side">
+        <div *ngFor="let img of product.images" class="img__container">
+            <img src="{{ img }}" alt="">
+        </div>
+    </div>
+
+    <div class="right__side">
+        <h3 class="name">{{ product.description | uppercase }}</h3>
+        <p class="price">{{ product.unitPrice | currency: 'EUR' }}</p>
+
+        <div class="size__container">
+            <p *ngIf="product.unitsInStock > 0 && product.unitsInStock <= 3" class="alert low-in-stock">Low in stock.</p>
+            <p *ngIf="product.unitsInStock === 0" class="alert out-of-stock">Out of stock.</p>
+
+            <ul class="size">
+                <li *ngFor="let size of product.sizes">
+                    <button 
+                        value="{{ size.size }}"
+                        [ngClass]="{ 'active' : size.size === selectedSize}"
+                        [ngClass]="{ 'not-available': size.quantity === 0}"
+                        [disabled]="size.quantity === 0"
+                        (click)="selectSize(size.size)">
+                            {{ size.size }}
+                    </button>
+                </li>
+            </ul>
+
+            <p *ngIf="showErrorMsg" class="alert-sizes">Please select from the available size options</p>
+
+            <div class="bag">
+                <button class="add" (click)="addToCart(product, $event)">ADD TO CART</button>
+            </div>
+
+
+
+            <div class="accordion">
+                <input type="checkbox" id="description">
+                <label for="description">DESCRIPTION</label>
+                <div class="accordion__content__container">
+                    <p class="content">
+                        Featuring artwork by Slugger, the 'Chem Trails' tee is for those who love to question everything - your next deep dive into life's mysteries.
+                    </p>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <input type="checkbox" id="size__guide">
+                <label for="size__guide">SIZE GUIDE</label>
+                <div class="accordion__content__container">
+                    <div class="links">
+                        <button #accBtn1 class="active" value="conversion" [ngClass]="{ 'active': display === accBtn1.value}" (click)="selectAccordionSection(accBtn1.value)">
+                            CONVERSION
+                        </button>
+                        <button #accBtn2 value="mesurements" [ngClass]="{ 'active': display === accBtn2.value}" (click)="selectAccordionSection(accBtn2.value)">
+                            MEASUREMENTS
+                        </button>
+                        <button #accBtn3 value="how to" [ngClass]="{ 'active': display === accBtn3.value}" (click)="selectAccordionSection(accBtn3.value)">
+                            HOW TO MEASURE
+                        </button>
+                    </div>
+
+                    <div class="content">
+                        <div [ngClass]="{ 'active': display === accBtn1.value}" class="section conversion">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>XS</th>
+                                        <th>S</th>
+                                        <th>M</th>
+                                        <th>L</th>
+                                        <th>XL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>UK/AU</th>
+                                        <td>28</td>
+                                        <td>30</td>
+                                        <td>32</td>
+                                        <td>34</td>
+                                        <td>36</td>
+                                    </tr>
+                                    <tr>
+                                        <th>UK/AU</th>
+                                        <td>28</td>
+                                        <td>30</td>
+                                        <td>32</td>
+                                        <td>34</td>
+                                        <td>36</td>
+                                    </tr>
+                                    <tr>
+                                        <th>EU</th>
+                                        <td>38</td>
+                                        <td>40</td>
+                                        <td>42</td>
+                                        <td>44</td>
+                                        <td>46</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div [ngClass]="{ 'active': display === accBtn2.value}" class="section measurements">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th>XS</th>
+                                        <th>S</th>
+                                        <th>M</th>
+                                        <th>L</th>
+                                        <th>XL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>CHEST</th>
+                                        <td>cm</td>
+                                        <td>88-92</td>
+                                        <td>93-97</td>
+                                        <td>98-102</td>
+                                        <td>103-107</td>
+                                        <td>108-112</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>Inch</td>
+                                        <td>35-36</td>
+                                        <td>37-38</td>
+                                        <td>39-40</td>
+                                        <td>41-42</td>
+                                        <td>43-44</td>
+                                    </tr>
+                                    <tr>
+                                        <th>WAIST</th>
+                                        <td>cm</td>
+                                        <td>66-70</td>
+                                        <td>71-75</td>
+                                        <td>76-80</td>
+                                        <td>81-85</td>
+                                        <td>86-90</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>Inch</td>
+                                        <td>26-28</td>
+                                        <td>28-30</td>
+                                        <td>30-31</td>
+                                        <td>32-33</td>
+                                        <td>34-35</td>
+                                    </tr>
+                                    <tr>
+                                        <th>HIPS</th>
+                                        <td>cm</td>
+                                        <td>87-91</td>
+                                        <td>92-96</td>
+                                        <td>97-101</td>
+                                        <td>102-106</td>
+                                        <td>107-111</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>Inch</td>
+                                        <td>34-36</td>
+                                        <td>36-38</td>
+                                        <td>38-40</td>
+                                        <td>40-42</td>
+                                        <td>42-44</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div [ngClass]="{ 'active': display === accBtn3.value}" class="section how-to">
+                            <div class="how-to-container">
+                                <div class="how-to-left">
+                                    <img src="assets/images/how_to_measure_male.avif" *ngIf="product.gender === 'M'" class="male" alt="">
+                                    <img src="assets/images/how_to_measure_female.avif" *ngIf="product.gender === 'F'"  class="female" alt="">
+                                </div>
+
+                                <div class="how-to-right">
+                                    <h4>1. CHEST</h4>
+                                    <p>
+                                        Wrap the tape measure around your upper back, under your armpits and the fullest part of your chest, checking in the mirror to ensure the tape measure is straight. Tape measure should be firm but not tight.
+                                    </p>
+
+                                    <h4>2. WAIST</h4>
+                                    <p>
+                                        Tape measure should sit around the smallest point of your waist and should be firm but not tight (above belly button and below your rib cage).
+                                    </p>
+
+                                    <h4>3. HIPS</h4>
+                                    <p>
+                                        Wrap the tape measure around the fullest part of your bottom and around to the front of your hips, checking in the mirror to ensure the tape measure is straight.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+
+            <div class="accordion">
+                <input type="checkbox" id="care">
+                <label for="care">LOOK AFTER ME</label>
+                <div class="accordion__content__container">
+                    <p class="content">Machine wash according to instructions on care label.</p>
+                </div> 
+            </div>        
+        </div>
+    </div>
+</div>

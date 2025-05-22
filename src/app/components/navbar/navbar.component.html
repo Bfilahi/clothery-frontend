@@ -1,0 +1,26 @@
+<header id="header">
+
+    <div class="top__header">
+        <a routerLink="/home" class="logo">Clothery</a>
+
+        <app-search></app-search>
+    
+        <nav>
+            <ul class="nav__wrapper">
+                <app-login-status></app-login-status>
+    
+                <app-cart-status></app-cart-status>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="admin__menu" #adminMenu *ngIf="isAdmin">
+        <button class="admin__menu-toggle" (click)="onMenuToggle(adminMenu)"></button>
+        <span class="admin-btns">
+            <a routerLink="/admin/update-hero" class="btn btn-hero">Hero</a>
+            <a routerLink="/admin/add-category" class="btn btn-category">Category</a>
+            <a routerLink="/admin/add-product" class="btn btn-product">Product</a>
+        </span>
+    </div>
+
+</header>

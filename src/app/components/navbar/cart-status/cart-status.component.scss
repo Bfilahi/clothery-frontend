@@ -1,0 +1,19 @@
+@import '../../../scss/base/colors';
+
+
+.container{
+    position: relative;
+
+    .cart{
+        .items-in-cart{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        &.active .fa-briefcase{
+            color: $color-green;
+        }
+    }
+}

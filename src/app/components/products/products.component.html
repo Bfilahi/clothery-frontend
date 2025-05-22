@@ -1,0 +1,54 @@
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="line-spin-fade">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
+
+<div class="section__container">
+    <div class="filter" *ngIf="showFilter">
+        <button class="btn"
+            [ngClass]="{'active': selectedCategory === -1}"
+            (click)="listAllProducts()">
+            ALL
+        </button>
+
+        <a class="btn" *ngFor="let category of categories"
+            [routerLink]="['/products', category.gender === 'M' ? 'men' : 'women']"
+            [queryParams]="{id: category.id}"
+            [ngClass]="{'active': category.id === selectedCategory}">
+            {{ category.type | uppercase}}
+        </a>
+
+        <button class="btn out-of-stock" 
+            *ngIf="isAdmin"
+            [ngClass]="{'active': selectedCategory === -2}"
+            (click)="filterOutOfStock()">
+            OUT OF STOCK
+        </button>
+    </div>
+    <ul>
+        <li *ngFor="let product of products">
+            <a routerLink="/product-details/{{product.id}}">
+                <div class="img__container">
+                    <img src="{{ product.images[0] }}" alt="">
+                </div>
+                <div class="title__description">
+                    <h3>{{ product.productName }}</h3>
+                    <p>{{ product.description }}</p>
+                </div>
+            </a>
+
+            <div class="btns-admin" *ngIf="isAdmin">
+                <button class="btn btn-delete" (click)="onDelete(product)">DELETE</button>
+                <button class="btn btn-update" (click)="goToUpdate(product)">UPDATE</button>
+            </div>
+        </li>
+    </ul>
+
+    <div *ngIf="products.length == 0 && !isLoading" class="alert">
+        <p>NOTHING MATCHES YOUR SEARCH</p>
+        <p>But don't give up – check the spelling or try less specific search terms.</p>
+    </div>
+</div>

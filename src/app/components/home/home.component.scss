@@ -1,0 +1,68 @@
+@import '../../scss/base/colors';
+@import '../../scss/abstracts/mixins';
+
+#hero{
+    position: relative;
+    max-height: 105svh;
+    min-height: 100vh;
+    height: auto;
+    overflow: hidden;
+
+    .container{
+        position: relative;
+        height: 100%;
+
+        .image__container{
+            display: flex;
+            overflow: hidden;
+            height: 100%;
+
+            .left,
+            .right{
+                max-width: 50%;
+            }
+        }
+
+        .shop__btns{
+            position: absolute;
+            z-index: 100;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 20%;
+
+            @include respond(max-width, tab-portrait-sm){
+                gap: 10%;
+            }
+
+            @include respond(max-width, phone-sm){
+                top: 70%;
+                flex-direction: column;
+                gap: 1em;
+            }
+
+            .btn-shop{
+                background-color: $bg-dark;
+                border: 1px solid $color-border;
+                padding-block: 1em;
+                width: 20em;
+                text-align: center;
+            
+                transition: background-color .3s;
+
+                &:hover{
+                    background-color: $bg-light;
+                }
+
+                @include respond(max-width, tab-portrait-sm){
+                    width: 13em;
+                }
+            }
+        }
+    }
+
+    @include respond(max-width, tab-portrait-sm){
+        height: 100vh;
+    }
+}

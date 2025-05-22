@@ -1,0 +1,24 @@
+<form #updateCategoryForm="ngForm" class="section__container" (ngSubmit)="onUpdateCategory(updateCategoryForm)">
+    <h2>Update category</h2>
+    <div class="inputs">
+        <input type="text" name="categoryName" placeholder="category name" [ngModel]="categoryName" required>
+        <input type="text" name="type" placeholder="category type" [ngModel]="categoryType" required>
+
+        <select id="gender" name="gender" [ngModel]="gender" required>
+            <option value="M">M</option>
+            <option value="F">F</option>
+        </select>
+
+        <div class="img__input">
+            <input type="file" name="imgUrl" ngModel #imgUrl="ngModel" (change)="onImageChange($event)" required>
+            <ng-container *ngIf="imgUrl.touched && imgUrl.dirty">
+                <p class="error" *ngIf="imgUrl.errors?.['required']">Field required!</p>
+                <p class="error" *ngIf="isAnError">
+                    {{ errorMessage }}
+                </p>
+            </ng-container>
+        </div>
+    </div>
+
+    <button type="submit" class="btn-update" [disabled]="updateCategoryForm.invalid || !correctImageSize">Update</button>
+</form>

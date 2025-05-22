@@ -1,0 +1,91 @@
+@import '../../../scss/base/colors';
+
+
+.section__container{
+    max-width: 50em;
+    margin-inline: auto;
+
+    h1{
+        margin-block: 1em;
+        padding-inline: .5em;
+        text-transform: uppercase;
+    }
+
+    .accordion{
+        input{
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            opacity: 0;
+            visibility: hidden;
+
+            &:checked ~ .accordion__content__container{
+                max-height: fit-content;
+                padding-block: 1em;
+            }
+        }
+        
+        label{
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+        
+            border: 1px solid $color-gray;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            padding: .5em;
+        }
+
+        .accordion__content__container{
+            max-height: 0px;
+            overflow: hidden;
+            box-shadow: 0 0px 4px $color-gray;
+
+            p{
+                margin: .5em 0 1em;
+            }
+
+            .content{
+                padding: 1em;
+                font-size: .8em;
+            }
+
+            table{
+                width: 100%;
+                border-collapse: collapse;
+                table-layout: auto;
+                font-size: 1.5em;
+
+                td{
+                    text-align: center;
+                    padding-block: .5em;
+                }
+
+                th{
+                    font-weight: bold;
+                    padding: .5em;
+                }
+
+                tbody{
+                    tr:nth-child(even){
+                        background-color: $bg-light;
+                    }
+
+                    th{
+                        text-align: left;
+                    }
+                }
+
+            }
+
+            table,
+            table td,
+            table th{
+                border: 1px solid $color-gray;
+            }
+        }
+    }
+}

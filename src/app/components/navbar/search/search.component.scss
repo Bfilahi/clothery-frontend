@@ -1,0 +1,91 @@
+@import '../../../scss/base/colors';
+@import '../../../scss/abstracts/mixins';
+
+:host{
+    width: 40%;
+    max-width: 30rem;
+}
+
+form{
+    .overlay{
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        background-color: $bg-light;
+
+        & ~ input.search__bar-sm{
+            display: none;
+            position: absolute;
+            top: 10em;
+            left: 50%;
+            width: 70%;
+            z-index: 100;
+            transform: translateX(-50%);
+        }
+
+        &.active,
+        &.active ~ .btn-close,
+        &.active ~ input.search__bar-sm{
+            display: block;
+
+            @include respond(min-width, phone-sm){
+                display: none;
+            }
+        }
+    }
+
+    input{
+        width: 100%;
+        padding: .5em 1em;
+        margin-left: 1em;
+        border-radius: 10em;
+        border: 0;
+        background-color: $color-gray;
+        color: $color-white;
+        outline: 0;
+
+        @include respond(max-width, phone-sm){
+            display: none;
+        }
+    
+        &:focus{
+            outline: 1px solid $color-focus;
+        }
+    
+        &.search__bar-sm{
+            display: none;
+        }
+    }
+
+    .btn-search{
+        display: none;
+        border: 1px solid $color-white;
+        background-color: $bg-light;
+        padding: .5em;
+        border-radius: .3em;
+        margin-inline: auto;
+        transition: background-color .3s;
+
+        @include respond(max-width, phone-sm){
+            display: flex;
+        }
+
+        &:hover{
+            background-color: $color-gray;
+        }
+    }
+
+    .btn-close{
+        border: 1px solid $color-border;
+        display: none;
+        position: absolute;
+        top: 2em;
+        right: 2em;
+        z-index: 100;
+
+        .fa{
+            font-size: 2em;
+        }
+    }
+}

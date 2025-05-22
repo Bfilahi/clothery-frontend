@@ -1,0 +1,69 @@
+<form #updateProductForm="ngForm" class="section__container" (ngSubmit)="onUpdateProduct(updateProductForm)">
+    <h2>Update product</h2>
+    <div class="inputs">
+        <div class="img__input">
+            <input type="file" name="imgUrl" ngModel (change)="onImageChange($event)" #imgUrl="ngModel" required multiple>
+            <ng-container *ngIf="imgUrl.touched && imgUrl.dirty">
+                <p class="error" *ngIf="imgUrl.errors?.['required']">Field required!</p>
+                <p class="error" *ngIf="isAnError">
+                    {{ errorMessage }}
+                </p>
+            </ng-container>
+        </div>
+
+        <div>
+            <input type="text" name="productName" placeholder="Name" [ngModel]="productName" #pName="ngModel" required>
+            <ng-container *ngIf="pName.touched && pName.dirty && pName.errors?.['required']">
+                <p class="error">Field required!</p>
+            </ng-container>
+        </div>
+
+        <div>
+            <textarea name="description" placeholder="Description" [ngModel]="description" #descr="ngModel" required></textarea>
+            <ng-container *ngIf="descr.touched && descr.dirty && descr.errors?.['required']">
+                <p class="error">Field required!</p>
+            </ng-container>
+        </div>
+
+        <div>
+            <input type="number" name="unitPrice" placeholder="Price" [ngModel]="unitPrice" #price="ngModel" required>
+            <ng-container *ngIf="price.touched && price.dirty && price.errors?.['required']">
+                <p class="error">Field required!</p>
+            </ng-container>
+        </div>
+
+        <div class="sizes__wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Size</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="size" *ngFor="let size of sizes">
+                        <td>
+                            <div class="size__container">
+                                <input type="checkbox" name="size-{{ size }}" id="size-{{ size }}"
+                                    [checked]="selectedSizes.includes(size)"
+                                    (change)="onSelectedSizes(size, $event)">
+                                <label for="size-{{ size }}">{{ size }}</label>
+                            </div>
+                        </td>
+                        <td>
+                            <input type="number" name="quantity-{{ size }}" 
+                            [(ngModel)] = "sizeQuantities[size]"
+                            [disabled]="!selectedSizes.includes(size)"
+                            required>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <button type="submit" class="btn-update" 
+        [disabled]="updateProductForm.invalid || selectedSizes.length == 0">
+        Update
+    </button>
+</form>

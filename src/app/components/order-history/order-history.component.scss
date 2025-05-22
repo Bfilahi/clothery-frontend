@@ -1,0 +1,39 @@
+@import '../../scss/base/colors';
+
+.section__container{
+
+    .table{
+        width: 100%;
+        max-width: 80em;
+        margin-inline: auto;
+        margin-top: 5em;
+
+        border-collapse: collapse;
+
+        th{
+            font-size: 1.2em;
+            padding-block: .3em;
+            text-decoration: underline;
+        }
+
+        td{
+            text-align: center;
+        }
+
+        th,
+        td{
+            border: 1px solid $color-border;
+        }
+
+        tbody{
+            .btn{
+                background-color: $color-green;
+                margin-block: .5em;
+            }
+
+            tr:nth-child(odd){
+                background-color: $bg-light;
+            }
+        }
+    }
+}

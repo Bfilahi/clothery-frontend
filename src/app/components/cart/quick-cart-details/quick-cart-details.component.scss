@@ -1,0 +1,132 @@
+@import '../../../scss/base/colors';
+@import '../../../scss/abstracts/mixins';
+
+
+
+.cart__container{
+    position: absolute;
+    top: 2em;
+    right: 0;
+    z-index: 100;
+    background-color: $bg-light;
+    border: 1px solid $color-gray;
+    width: 19em;
+    max-height: 80vh;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar{
+        width: 0;
+    }
+
+    .cart__wrapper{
+        display: flex;
+        flex-direction: column;
+
+        .cart__header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1em;
+            padding: .5em 1em;
+
+            p{
+                font-size: .8em;
+            }
+
+            .btn-close{
+                font-size: 1.5em;
+            }
+        }
+    }
+
+    .products__wrapper{
+        border-block: 1px solid $color-gray;
+        background-color: $bg-dark;
+        padding: 1em;
+
+        .product{
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1em;
+            padding-block: 1em;
+
+            &:not(:last-child){
+                border-bottom: 1px solid $color-gray;
+            }
+
+            .product__img{
+                width: 5em;
+                min-width: 5em;
+            }
+
+            .product__details{
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: .5em;
+                width: 100%;
+
+                .quantity,
+                .product__description{
+                    font-size: .9em;
+                }
+
+                .btn-remove{
+                    align-self: flex-end;
+                }
+            }
+        }
+
+        .product,
+        .size-quantity{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1em;
+        }
+    }
+
+    .total,
+    .btns
+    {
+        padding: 1em;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1em;
+    }
+    
+    .btns{
+        background-color: $bg-dark;
+        border-top: 1px solid $color-gray;
+
+        @include respond(max-width, phone-sm){
+            flex-direction: column;
+        }
+
+        .btn{
+            border: 2px solid transparent;
+            padding-block: .5em;
+            font-size: 1em;
+            width: 100%;
+            text-align: center;
+
+            &.btn-cart{
+                border-color: $color-gray;
+                background-color: $bg-light;
+            }
+
+            &.btn-purchase{
+                border-color: green;
+                background-color: $color-green;
+            }
+        }
+    }
+
+    
+    @include respond(max-width, phone-sm){
+        max-width: 14em;
+    }
+}

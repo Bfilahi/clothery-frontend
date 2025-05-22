@@ -1,0 +1,30 @@
+<div class="section__container">
+    <form #heroForm="ngForm" (ngSubmit)="onFormSubmit()">
+        <div class="inputs">
+            <div class="img__input">
+                <label>Left image:</label>
+                <input type="file" name="l-image" ngModel #lImage="ngModel" (change)="onLeftImageChange($event)" required>
+                <ng-container *ngIf="lImage.touched && lImage.dirty">
+                    <p class="error" *ngIf="lImage.errors?.['required']">Field required!</p>
+                    <p class="error" *ngIf="l_isAnError">
+                        {{ l_errorMessage }}
+                    </p>
+                </ng-container>
+            </div>
+    
+            <div class="img__input">
+                <label>Right image:</label>
+                <input type="file" name="r-image" ngModel #rImage="ngModel" (change)="onRightImageChange($event)" required>
+                <ng-container *ngIf="rImage.touched && rImage.dirty">
+                    <p class="error" *ngIf="rImage.errors?.['required']">Field required!</p>
+                    <p class="error" *ngIf="r_isAnError">
+                        {{ r_errorMessage }}
+                    </p>
+                </ng-container>
+            </div>
+        </div>
+    
+        <button type="submit" class="btn-add" 
+            [disabled]="heroForm.invalid || l_isAnError || r_isAnError">Add</button>
+    </form>
+</div>

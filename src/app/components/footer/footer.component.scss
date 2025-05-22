@@ -1,0 +1,68 @@
+@import '../../scss/base/colors';
+@import '../../scss/abstracts/mixins';
+
+#footer {
+    background-color: $bg-light;
+    padding: 10em 2em 0 2em;
+
+    p{
+        font-size: .8em;
+    }
+
+    .wrapper{
+        margin-inline: auto;
+        max-width: 120em;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1em;
+
+        .card{
+            background-color: $bg-dark;
+            border: 1px solid $color-border;
+            padding: .7em;
+
+            .card__title{
+                font-size: 1em;
+                margin-bottom: 1em;
+            }
+
+            .link{
+                padding-block: .5em;
+                border-top: 1px solid $color-white;
+        
+                a{
+                    font-size: .8em;
+                    transition: transform .2s;
+                }
+        
+                &:hover a{
+                    transform: translateX(1em);
+                }
+            }
+        }
+    }
+
+    .footer__bottom{
+        display: flex;
+        justify-content: space-between;
+        gap: 1em;
+        padding-block: 2em;
+    }
+}
+
+
+@include respond(max-width, tab-portrait-sm){
+    #footer{
+        .wrapper{
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+}
+
+@include respond(max-width, phone-sm){
+    #footer{
+        .wrapper{
+            grid-template-columns: 1fr;
+        }
+    }
+}

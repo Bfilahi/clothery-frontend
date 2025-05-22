@@ -1,0 +1,37 @@
+<div class="cart__container" *ngIf="isOpen">
+    <div class="cart__wrapper">
+        <div class="cart__header">
+            <p>My cart, {{ totalQuantity }} products</p>
+            <button class="btn-close" (click)="closeQuickCart()"><i class="fa fa-close"></i></button>
+        </div>
+    
+        <ul class="products__wrapper">
+            <li class="product" *ngFor="let item of cartItems">
+                <div class="product__img">
+                    <img src="{{ item.images[0] }}" alt="">
+                </div>
+                
+                <div class="product__details">
+                    <p class="product__price">{{ item.unitPrice | currency: 'EUR' }}</p>
+                    <p class="product__description">{{ item.description }}</p>
+                    <div class="size-quantity">
+                        <p class="size">Size: {{ item.selectedSize }}</p>
+                        <p class="quantity">Qty. {{ item.quantity }}</p>
+                    </div>
+                    
+                    <button class="btn-remove" (click)="removeProduct(item)"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </li>
+        </ul>
+    
+        <p class="total">
+            <span>Subtotal:</span>
+            <span>{{ totalPrice | currency: 'EUR' }}</span>
+        </p>
+    
+        <div class="btns">
+            <a routerLink="/cart-details" class="btn btn-cart">VIEW CART</a>
+            <button class="btn btn-purchase" (click)="checkout()">PURCHASE</button>
+        </div>
+    </div>
+</div>

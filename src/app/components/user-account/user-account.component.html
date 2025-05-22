@@ -1,0 +1,23 @@
+<div class="section__container">
+    <div class="left__column">
+        <ul class="wrapper">
+            <li class="wrapper__header">
+                <p>Hello, <span>{{ userFullName | titlecase }}</span></p>
+            </li>
+            <li>
+                <i class="fa fa-box"></i>
+                <a routerLink="/orders">My orders</a>
+            </li>
+
+            <li class="wrapper__exit">
+                <i class="fa fa-right-from-bracket"></i>
+                <button (click)="exitApp()">Exit</button>
+            </li>
+        </ul>
+    </div>
+    <div class="right__column">
+        <h2>
+            <span>WELCOME TO</span> <br> <span>YOUR ACCOUNT</span>
+        </h2>
+    </div>
+</div>

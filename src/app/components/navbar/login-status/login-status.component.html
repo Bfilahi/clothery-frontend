@@ -1,0 +1,27 @@
+<li class="nav__link">
+    <button class="account" (mouseenter)="display()">
+        <i class="fa-solid fa-user"></i>
+    </button>
+
+    <div class="container" *ngIf="isOpen">
+        <div class="login__header">
+            <p *ngIf="isAuthenticated" class="user__name">Hello, <span>{{ userFullname | titlecase}}</span></p>
+            <button *ngIf="!isAuthenticated" (click)="logIn()" class="btn btn-login">Login</button>
+            <button *ngIf="isAuthenticated" (click)="logOut()" class="btn btn-logout">Logout</button>
+
+            <button class="btn-close" (click)="closeQuickCart()"><i class="fa fa-close"></i></button>
+        </div>
+        
+        <div class="links">
+            <div class="user__account">
+                <i class="fa fa-user"></i>
+                <a routerLink="/account">My account</a>
+            </div>
+        
+            <div class="user__orders">
+                <i class="fa fa-box"></i>
+                <a routerLink="/orders">Order history</a>
+            </div>
+        </div>
+    </div>
+</li>

@@ -1,0 +1,23 @@
+@import '../../../scss/base/colors';
+
+
+
+.section__container{
+    div{
+        width: fit-content;
+        margin-inline: auto;
+
+        p{
+            font-size: 3em;
+        }
+        
+        a{
+            background-color: $bg-light;
+            width: fit-content;
+            padding: 1em 2em;
+            margin-top: 3em;
+            border: 1px solid $color-white;
+            margin-inline: auto;
+        }
+    }
+}

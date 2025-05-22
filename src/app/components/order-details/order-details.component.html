@@ -1,0 +1,82 @@
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="line-spin-fade">
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
+
+
+<div class="section__container">
+  <div class="content">
+    <div class="container">
+      
+      <div *ngIf="error" style="text-align: center; font-size: 1.7em;">
+        {{ error }}
+      </div>
+
+      <div *ngIf="!isLoading && !error && order">
+        <div>
+          <h2>Order Details</h2>
+          <button class="btn" (click)="goBack()">Back to Orders</button>
+        </div>
+
+        <div class="card summary">
+          <div class="card__header">
+            <h4>Order Summary</h4>
+          </div>
+          <div class="card__body">
+                <p><strong>Order Tracking Number:</strong> {{ order.orderTrackingNumber }}</p>
+                <p><strong>Date:</strong> {{ formatDate(order.dateCreated) }}</p>
+                <p><strong>Total Price:</strong> {{ order.totalPrice | currency:'EUR' }}</p>
+                <p><strong>Total Quantity:</strong> {{ order.totalQuantity }}</p>
+          </div>
+        </div>
+
+        <div class="card address">
+          <div class="card__header">
+            <h4>Shipping Address</h4>
+          </div>
+          <div class="card__body">
+            <p>{{ order.shippingAddress.line1 }}</p>
+            <p *ngIf="order.shippingAddress.line2">{{ order.shippingAddress.line2 }}</p>
+            <p>{{ order.shippingAddress.city }}, {{ order.shippingAddress.state }} {{ order.shippingAddress.postalCode }}</p>
+            <p>{{ order.shippingAddress.country }}</p>
+          </div>
+        </div>
+
+        <div class="card order-items">
+          <div class="card__header">
+            <h4>Order Items</h4>
+          </div>
+          <div class="card__body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Unit Price</th>
+                  <th>Quantity</th>
+                  <th>Subtotal</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of order.orderItems">
+                  <td>
+                    <img [src]="item.imageUrl" alt="{{ item.name }}" style="max-width: 80px;">
+                  </td>
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.unitPrice | currency:'EUR' }}</td>
+                  <td>{{ item.quantity }}</td>
+                  <td>{{ item.unitPrice * item.quantity | currency:'EUR' }}</td>
+                  <td><a routerLink="/product-details/{{item.productId}}" class="btn">View Details</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

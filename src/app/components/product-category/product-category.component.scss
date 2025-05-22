@@ -1,0 +1,85 @@
+@import '../../scss/base/colors';
+@import '../../scss/abstracts/mixins';
+
+
+#shop{
+    .container{
+        margin: 15em 5em;
+
+        @include respond(max-width, tab-portrait-lg){
+            margin-inline: 2em;
+        }
+
+        .wrapper{
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2em;
+
+            @include respond(max-width, tab-portrait-sm){
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            @include respond(max-width, phone){
+                grid-template-columns: 1fr;
+            }
+
+            .card{
+                background-color: $bg-light;
+                padding: 1em;
+                border: 1px solid $color-border;
+
+                & > div:first-child{
+                    position: relative;
+                }
+
+                .card__title{
+                    padding-bottom: 1em;
+                    font-size: 1em;
+                }
+    
+                img{
+                    max-height: 40em;
+                }
+
+                .btns-admin{
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    margin-top: 1em;
+
+                    .btn{
+                        @include respond(max-width, tab-portrait-sm){
+                            font-size: 1em;
+                        }
+                    }
+
+                    .btn-delete{
+                        background-color: $color-alert;
+                    }
+
+                    .btn-update{
+                        background-color: $color-green;
+                    }
+                }
+            }
+        }
+    }
+
+    .shop-now-btn{
+        position: absolute;
+        bottom: 5%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70%;
+        background-color: $bg-dark;
+
+        &:hover{
+            background-color: $bg-light;
+        }
+
+        @include respond(max-width, tab-portrait-sm){
+            font-size: 1em;
+        }
+    }
+}

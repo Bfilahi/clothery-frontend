@@ -1,0 +1,98 @@
+@import '../../scss/base/colors';
+@import '../../scss/abstracts/mixins';
+
+
+.section__container{
+    .filter{
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1em;
+        margin-bottom: 2em;
+
+        .btn{
+            border: 1px solid $color-border;
+            padding-block: .5em;
+
+            &.out-of-stock{
+                border-color: $color-border-admin;
+            }
+
+            &.active{
+                background-color: $color-green;
+            }
+
+            @include respond(max-width, tab-portrait-sm){
+                font-size: 1em;
+            }
+        }
+    }
+
+    ul{
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 20em);
+        justify-content: center;
+        gap: 1em;
+    
+        li{
+            max-width: 20em;
+            border: 1px solid $color-border;
+            padding-bottom: 1em;
+    
+            .img__container img{
+                min-height: 477px;
+            }
+
+            .title__description{
+                padding-left: .5em;
+            }
+    
+            h3{
+                padding-top: 1em;
+            }
+    
+            p{
+                font-size: .9em;
+            }
+    
+            .btns-admin{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+    
+                margin-top: 1em;
+                padding-inline: .5em;
+
+                .btn{
+                    @include respond(max-width, tab-portrait-sm){
+                        font-size: 1em;
+                    }
+                }
+    
+                .btn-delete{
+                    background-color: $color-alert;
+                }
+    
+                .btn-update{
+                    background-color: $color-green;
+                }
+            }
+    
+        }
+    }
+
+    .alert{
+        margin-top: 10em;
+        text-align: center;
+
+        p:nth-of-type(1){
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        p:nth-of-type(2){
+            font-size: 1em;
+            margin-top: 2em;
+        }
+    }
+}

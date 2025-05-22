@@ -1,0 +1,28 @@
+<div id="shop" class="section">
+    <div class="container">
+        <ul class="wrapper">
+            <li class="card" *ngFor="let category of categories">
+                <div>
+                    <h2 class="card__title">{{ category.categoryName }}</h2>
+                    <a [routerLink]="['/products', category.gender === 'M' ? 'men' : 'women']"
+                        [queryParams]="{id: category.id}">
+                        <img src="{{ category.imgUrl }}" alt="">
+                    </a>
+                    <a [routerLink]="['/products', category.gender === 'M' ? 'men' : 'women']"
+                        [queryParams]="{id: category.id}"
+                        class="shop-now-btn btn">
+                        SHOP NOW
+                        <span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </a>
+                </div>
+
+                <div class="btns-admin" *ngIf="isAdmin">
+                    <button class="btn btn-delete" (click)="onDelete(category)">DELETE</button>
+                    <button class="btn btn-update" (click)="goToUpdate(category)">UPDATE</button>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+<form method="GET" onsubmit="return false">
+    <div #overlay class="overlay"></div>
+
+    <input #myInput 
+        type="search" 
+        placeholder="What are you looking for?" 
+        value="{{ sharedKeyword }}"
+        class="search__bar" 
+        (keyup.enter)="doSearch(myInput.value)">
+    <button class="btn-search" type="submit" (click)="handleSearchBtn()">Search</button>
+
+    <button class="btn-close" (click)="handleCloseBtn()"><i class="fa fa-close"></i></button>
+    <input #searchBarSm 
+        type="search" 
+        placeholder="What are you looking for?" 
+        value="{{ sharedKeyword }}"
+        class="search__bar search__bar-sm" 
+        (keyup.enter)="doSearch(searchBarSm.value)">
+</form>

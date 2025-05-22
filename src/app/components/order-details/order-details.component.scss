@@ -1,0 +1,61 @@
+@import '../../scss/base/colors';
+
+
+.section__container{
+
+    .container{
+        max-width: 80em;
+        margin-inline: auto;
+
+        .btn{
+            border: 1px solid $color-border;
+            margin-top: 5em;
+        }
+
+        .card{
+            margin-top: 2em;
+
+            h4{
+                font-size: 1.2em;
+                margin-bottom: 1em;
+                text-decoration: underline;
+            }
+
+            table{
+                width: 100%;
+                border-collapse: collapse;
+
+                th{
+                    padding-block: .5em;
+                    font-size: 1.2em;
+                    text-decoration: underline;
+                }
+
+                th,
+                td{
+                    border: 1px solid $color-border;
+                }
+
+                td{
+                    text-align: center;
+
+                    img{
+                        margin-inline: auto;
+                    }
+                }
+
+                tbody{
+                    tr:nth-child(odd){
+                        background-color: $bg-light;
+                    }
+
+                    .btn{
+                        margin: auto;
+                        width: fit-content;
+                        background-color: $color-green;
+                    }
+                }
+            }
+        }
+    }
+}

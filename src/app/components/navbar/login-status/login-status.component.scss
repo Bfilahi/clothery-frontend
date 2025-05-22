@@ -1,0 +1,58 @@
+@import '../../../scss/base/colors';
+@import '../../../scss/abstracts/mixins';
+
+
+.nav__link{
+    position: relative;
+
+    .container{
+        position: absolute;
+        top: 2em;
+        right: 0;
+        z-index: 100;
+        background-color: $bg-light;
+        border: 1px solid $color-gray;
+        width: 18em;
+
+        .login__header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1em;
+            border-bottom: 1px solid $color-gray;
+
+            .user__name{
+                span{
+                    font-weight: bold;
+                    font-size: .9em;
+                }
+            }
+
+            .btn{
+                text-decoration: underline;
+            }
+
+            .btn-close{
+                font-size: 1em;
+            }
+        }
+
+        .links{
+            padding: 1em;
+            display: flex;
+            flex-direction: column;
+            gap: 2em;
+
+            div{
+                display: flex;
+                align-items: center;
+                gap: 1.5em;
+            }
+        }
+
+        @include respond(max-width, phone-sm){
+            right: -3em;
+            max-width: 13em;
+        }
+    }
+}

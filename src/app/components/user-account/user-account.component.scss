@@ -1,0 +1,65 @@
+@import '../../scss/base/colors';
+@import '../../scss/abstracts/mixins';
+
+
+
+.section__container{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    background-color: $bg-light;
+    padding-bottom: 2em;
+    height: auto;
+
+    @include respond(max-width, phone-sm){
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 4em;
+    }
+
+    .left__column{
+        .wrapper{
+            display: flex;
+            flex-direction: column;
+            gap: 2em;
+
+            li{
+                display: flex;
+                align-items: center;
+                gap: 1em;
+                padding: 0 0 0 1em;
+
+                a{
+                    border-bottom: 1px solid $color-gray;
+                    flex-basis: 100%;
+                    padding-block: 1em;
+                }
+            }
+
+            .wrapper__header{
+                padding: 2em 1em;
+                border-bottom: 1px solid $color-gray;
+
+                span{
+                    font-weight: bold;
+                }
+            }
+
+            .wrapper__exit{
+                i{
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+
+    .right__column{
+        display: grid;
+        place-items: center;
+
+        span{
+            display: inline-block;
+            background-color: $color-gray;
+            margin-block: .2em;
+        }
+    }
+}

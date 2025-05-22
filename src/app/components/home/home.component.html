@@ -1,0 +1,19 @@
+<section id="hero" class="section">
+    <div class="container">
+        <div class="image__container">
+            <div class="left">
+                <img [src]="leftImage" alt="">
+            </div>
+            <div class="right">
+                <img [src]="rightImage" alt="">
+            </div>
+        </div>
+        <div class="shop__btns">
+            <a routerLink="/products/{{btn.gender}}" class="btn-shop" *ngFor="let btn of buttons">
+                {{ btn.name }}
+            </a>
+        </div>
+    </div>
+</section>
+
+<app-product-category></app-product-category>
