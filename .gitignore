@@ -40,8 +40,3 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-
-# Images - exclude all files in these directories
-/src/assets/images/category/*
-/src/assets/images/men/*
-/src/assets/images/women/*
