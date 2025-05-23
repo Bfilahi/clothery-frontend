@@ -40,3 +40,8 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Images
+/src/assets/images/category
+/src/assets/images/men
+/src/assets/images/women
