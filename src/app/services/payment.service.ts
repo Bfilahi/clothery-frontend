@@ -25,7 +25,6 @@ export class PaymentService {
         if(!user)
           throw new Error('User not authenticated');
         
-
         // Adding the auth0Id to the payment request
         const enrichedRequest = {
           ...paymentRequest,

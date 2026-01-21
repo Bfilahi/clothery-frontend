@@ -1,17 +1,18 @@
-import { SizeQuantity } from "./size-quantity";
+import { Category } from "./category";
+import { Image } from "./image";
+import { Size } from "./size";
 
 
-export class Product{
-    public constructor(
-        public id: number,
-        public productName: string,
-        public description: string,
-        public gender: string,
-        public unitPrice: number,
-        public unitsInStock: number,
-        public categoryId: number,
-        public sizes: SizeQuantity[],
-        public images: string[],
-        public selectedSize: string
-    ){}
+export class Product {
+  public constructor(
+    public id: number,
+    public productName: string,
+    public description: string,
+    public gender: string,
+    public unitPrice: number,
+    public category: Category,
+    public unitsInStock: number,
+    public sizes: Size[],
+    public images: Image[]
+  ) {}
 }

@@ -18,15 +18,7 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
   styleUrl: './product-details.component.scss'
 })
 export class ProductDetailsComponent implements OnInit{
-
-  public product: any = {
-    productName: '',
-    description: '',
-    unitPrice: 0,
-    unitsInStock: 0,
-    images: [],
-    sizes: []
-  };
+  public product!: Product;
 
   public isSizeSelected: boolean = false;
   public showErrorMsg: boolean = false;
@@ -65,9 +57,9 @@ export class ProductDetailsComponent implements OnInit{
 
         this.spinnerService.hide();
       },
-      error: (error: HttpErrorResponse) => {
+      error: (err: HttpErrorResponse) => {
         this.spinnerService.hide();
-        this.notificationService.showError(error.error.message);
+        this.notificationService.showError(err.error.message);
       }
     });
 
@@ -78,7 +70,6 @@ export class ProductDetailsComponent implements OnInit{
 
     this.isSizeSelected = true;
   }
-
 
   public addToCart(product: Product, event: Event){
     event.stopPropagation();
@@ -91,7 +82,7 @@ export class ProductDetailsComponent implements OnInit{
     this.showErrorMsg = false;
 
     const cartItem = new CartItem(product);
-    cartItem.selectedSize = this.selectedSize;
+    cartItem.selectedSize = this.selectedSize;  
     this.cartService.addToCart(cartItem);
   }
 

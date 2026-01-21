@@ -1,102 +1,174 @@
-<form #newProductForm="ngForm" class="section__container" (ngSubmit)="onAddNewProduct(newProductForm)">
-    <h2>Add product</h2>
-    <div class="inputs">
-        <div class="img__input">
-            <input type="file" name="imgUrl" ngModel (change)="onImageChange($event)" #imgUrl="ngModel" required multiple>
-            <ng-container *ngIf="imgUrl.touched && imgUrl.dirty">
-                <p class="error" *ngIf="imgUrl.errors?.['required']">Field required!</p>
-                <p class="error" *ngIf="isAnError">
-                    {{ errorMessage }}
-                </p>
-            </ng-container>
-        </div>
-
-        <div>
-            <input type="text" name="productName" placeholder="Name" ngModel #productName="ngModel" required>
-            <ng-container *ngIf="productName.touched && productName.dirty && productName.errors?.['required']">
-                <p class="error">Field required!</p>
-            </ng-container>
-        </div>
-
-        <div>
-            <textarea name="description" placeholder="Description" #description="ngModel" ngModel required></textarea>
-            <ng-container *ngIf="description.touched && description.dirty && description.errors?.['required']">
-                <p class="error">Field required!</p>
-            </ng-container>
-        </div>
-
-        <div>
-            <input type="number" name="unitPrice" placeholder="Price" #unitPrice="ngModel" ngModel required>
-            <ng-container *ngIf="unitPrice.touched && unitPrice.dirty && unitPrice.errors?.['required']">
-                <p class="error">Field required!</p>
-            </ng-container>
-        </div>
-
-        <div>
-            <select id="gender" name="gender" (change)="listCategories($event)" #gender="ngModel" [ngModel]="defaultValue" required>
-                <option value="">Select gender</option>
-                <option value="M">M</option>
-                <option value="F">F</option>
-            </select>
-
-            <ng-container *ngIf="gender.touched && gender.dirty && gender.errors?.['required']">
-                <p class="error">Field required!</p>
-            </ng-container>
-        </div>
-
-
-        <div class="sizes__wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Size</th>
-                        <th>Quantity</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="size" *ngFor="let size of sizes">
-                        <td>
-                            <div class="size__container">
-                                <input type="checkbox" name="size-{{ size }}" id="size-{{ size }}" (change)="onSelectedSizes(size, $event)">
-                                <label for="size-{{ size }}">{{ size }}</label>
-                            </div>
-                        </td>
-                        <td>
-                            <input type="number" name="quantity-{{ size }}" 
-                            [(ngModel)] = "sizeQuantities[size]"
-                            [disabled]="!selectedSizes.includes(size)"
-                            required>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div>
-            <select name="category" #category="ngModel" ngModel required>
-                <option value="">Select category</option>
-                <option value="{{ category.categoryName }}" *ngFor="let category of selectCategories"> {{ category.categoryName }} </option>
-            </select>
-    
-            <ng-container *ngIf="category.touched && category.dirty && category.errors?.['required']">
-                <p class="error">Field required!</p>
-            </ng-container>
-        </div>
-
-        <div>
-            <select name="categoryType" #type="ngModel" ngModel required>
-                <option value="">Select category type</option>
-                <option value="{{ category.type }}" *ngFor="let category of selectCategories">{{ category.type }}</option>
-            </select>
-
-            <ng-container *ngIf="type.touched && type.dirty && type.errors?.['required']">
-                <p class="error">Field required!</p>
-            </ng-container>
-        </div>
+<form
+  #newProductForm="ngForm"
+  class="section__container"
+  (ngSubmit)="onAddNewProduct(newProductForm)"
+>
+  <h2>Add product</h2>
+  <div class="inputs">
+    <div class="img__input">
+      <input
+        type="file"
+        name="imgUrl"
+        ngModel
+        (change)="onImageChange($event)"
+        #imgUrl="ngModel"
+        required
+        multiple
+      />
+      <ng-container *ngIf="imgUrl.touched && imgUrl.dirty">
+        <p class="error" *ngIf="imgUrl.errors?.['required']">Field required!</p>
+        <p class="error" *ngIf="isAnError">
+          {{ errorMessage }}
+        </p>
+      </ng-container>
     </div>
 
-    <button type="submit" class="btn-add" 
-        [disabled]="newProductForm.invalid || selectedSizes.length === 0">
-        Add
-    </button>
+    <div>
+      <input
+        type="text"
+        name="productName"
+        placeholder="Name"
+        ngModel
+        #productName="ngModel"
+        required
+      />
+      <ng-container
+        *ngIf="productName.touched && productName.dirty && productName.errors?.['required']"
+      >
+        <p class="error">Field required!</p>
+      </ng-container>
+    </div>
+
+    <div>
+      <textarea
+        name="description"
+        placeholder="Description"
+        #description="ngModel"
+        ngModel
+        required
+      ></textarea>
+      <ng-container
+        *ngIf="description.touched && description.dirty && description.errors?.['required']"
+      >
+        <p class="error">Field required!</p>
+      </ng-container>
+    </div>
+
+    <div>
+      <input
+        type="number"
+        name="unitPrice"
+        placeholder="Price"
+        #unitPrice="ngModel"
+        ngModel
+        required
+      />
+      <ng-container
+        *ngIf="unitPrice.touched && unitPrice.dirty && unitPrice.errors?.['required']"
+      >
+        <p class="error">Field required!</p>
+      </ng-container>
+    </div>
+
+    <div>
+      <select
+        id="gender"
+        name="gender"
+        (change)="listCategories($event)"
+        #gender="ngModel"
+        [ngModel]="defaultValue"
+        required
+      >
+        <option value="">Select gender</option>
+        <option value="M">M</option>
+        <option value="F">F</option>
+      </select>
+
+      <ng-container
+        *ngIf="gender.touched && gender.dirty && gender.errors?.['required']"
+      >
+        <p class="error">Field required!</p>
+      </ng-container>
+    </div>
+
+    <div class="size__container">
+      <div class="size" *ngFor="let size of sizes">
+        <input
+          type="checkbox"
+          name="size-{{ size.size }}"
+          id="size-{{ size.id }}"
+          (change)="onSelectedSizes(size, $event)"
+        />
+        <label for="size-{{ size.id }}">{{ size.size }}</label>
+          <button type="button" class="btn-remove" (click)="removeProduct(size)">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+      </div>
+    </div>
+
+    <div class="add__size">
+      <input type="text" placeholder="Enter a size" #sizeValue />
+      <button type="button" (click)="onAddNewSize(sizeValue)">New Size</button>
+    </div>
+
+    <div>
+      <input
+        type="number"
+        name="unitsInStock"
+        placeholder="Quantity"
+        #unitsInStock="ngModel"
+        ngModel
+        required
+      />
+      <ng-container
+        *ngIf="unitsInStock.touched && unitsInStock.dirty && unitsInStock.errors?.['required']"
+      >
+        <p class="error">Field required!</p>
+      </ng-container>
+    </div>
+
+    <div>
+      <select name="category" #category="ngModel" ngModel required>
+        <option value="">Select category</option>
+        <option
+          value="{{ category.categoryName }}"
+          *ngFor="let category of selectCategories"
+        >
+          {{ category.categoryName }}
+        </option>
+      </select>
+
+      <ng-container
+        *ngIf="category.touched && category.dirty && category.errors?.['required']"
+      >
+        <p class="error">Field required!</p>
+      </ng-container>
+    </div>
+
+    <div>
+      <select name="categoryType" #type="ngModel" ngModel required>
+        <option value="">Select category type</option>
+        <option
+          value="{{ category.type }}"
+          *ngFor="let category of selectCategories"
+        >
+          {{ category.type }}
+        </option>
+      </select>
+
+      <ng-container
+        *ngIf="type.touched && type.dirty && type.errors?.['required']"
+      >
+        <p class="error">Field required!</p>
+      </ng-container>
+    </div>
+  </div>
+
+  <button
+    type="submit"
+    class="btn-add"
+    [disabled]="newProductForm.invalid || selectedSizes.length === 0"
+  >
+    Add
+  </button>
 </form>

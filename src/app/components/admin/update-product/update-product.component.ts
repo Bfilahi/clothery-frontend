@@ -7,92 +7,79 @@ import { CommonModule } from '@angular/common';
 import { Product } from '../../../model/Product';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-
+import { Size } from '../../../model/size';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-update-product',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './update-product.component.html',
-  styleUrl: './update-product.component.scss'
+  styleUrl: './update-product.component.scss',
 })
 export class UpdateProductComponent {
-
-  public sizes: string[] = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '28', '30', '32', '34', '36', '38', '40', '42', '44', '46'];
-  public selectedSizes: string[] = [];
+  public selectedSizes: any[] = [];
   public correctImageSize: boolean = false;
 
+  public sizes: Size[] = [];
   public productName: string = '';
   public description: string = '';
   public unitPrice: number = 0;
+  public unitsInStock: number = 0;
 
   public isAnError: boolean = false;
   public errorMessage: string = '';
 
-  public sizeQuantities: {[size: string]: number | string} = {};
+  public sizeQuantities: { [size: string]: number | string } = {};
 
   private currentProduct!: Product;
   private imageFiles: File[] = [];
-
 
   public constructor(
     private productService: ProductService,
     private router: Router,
     private utilityService: UtilityService,
-    private notificationService: NotificationService
-  ){}
+    private notificationService: NotificationService,
+    private spinnerService: NgxSpinnerService
+  ) {}
 
   public ngOnInit(): void {
-    this.productService.productToUpdate.subscribe(
-      data => {
-        this.currentProduct = data;
-        if(this.currentProduct)
-          this.fillForm(data);
-      }
-    );
+    this.productService.productToUpdate.subscribe((data) => {
+      this.currentProduct = data;
+      if (this.currentProduct) this.fillForm(this.currentProduct);
+    });
+
+    this.getSizes();
   }
 
-  private fillForm(product: Product){
+  private fillForm(product: Product) {
     this.productName = product.productName;
     this.description = product.description;
     this.unitPrice = product.unitPrice;
-
-    this.selectedSizes = product.sizes.map(sq => sq.size);
-
-    product.sizes.forEach(sq => {
-      this.sizeQuantities[sq.size] = sq.quantity
-    });
-
-
+    this.unitsInStock = product.unitsInStock;
+    this.selectedSizes = product.sizes;
   }
 
-  public onSelectedSizes(size: string, event: Event){
+  public onSelectedSizes(size: Size, event: Event) {
     const input = event.target as HTMLInputElement;
 
-    if(input.checked)
+    if (input.checked && !this.selectedSizes.some(s => s.id === size.id))
       this.selectedSizes.push(size);
-    else{
-      this.selectedSizes = this.selectedSizes.filter(s => s != size);
-      this.sizeQuantities[size] = '';
+    else {
+      this.selectedSizes = this.selectedSizes.filter((s) => s != size);
     }
   }
 
-  private hasValidSizeQuantities(): boolean{
-    return this.selectedSizes.every(size => {
-      const quantity = this.sizeQuantities[size];
-      return quantity != '' && !isNaN(Number(quantity)) && Number(quantity) >= 0;
-    });
-  }
-
-  public onImageChange(event: Event){
+  public onImageChange(event: Event) {
     let images: File[] | null;
     let imageCheck: boolean | null;
     let message: string;
     let input: HTMLInputElement;
 
-    [images, imageCheck, message, input] = this.utilityService.onImageChange(event);
+    [images, imageCheck, message, input] =
+      this.utilityService.onImageChange(event);
 
-    if(images == null || imageCheck == null){
+    if (images == null || imageCheck == null) {
       this.isAnError = true;
       this.errorMessage = message;
       input.value = '';
@@ -104,46 +91,65 @@ export class UpdateProductComponent {
     this.correctImageSize = imageCheck;
   }
 
-  public onUpdateProduct(ngForm: NgForm){
-    if(ngForm.value.productName.trim() === '' && ngForm.value.description.trim() === ''){
+  public getSizes() {
+    this.productService.getSizes().subscribe({
+      next: (response: Size[]) => {
+        this.sizes = response;
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error('Error: ', err);
+      },
+    });
+  }
+
+  public isSizeSelected(size: Size): boolean{
+    return this.selectedSizes.some(s => s.id === size.id);
+  }
+
+  public onUpdateProduct(ngForm: NgForm) {
+    if (
+      ngForm.value.productName.trim() === '' &&
+      ngForm.value.description.trim() === ''
+    ) {
       this.notificationService.showError('Fields are empty.');
       return;
     }
 
-    if(ngForm.invalid || !this.hasValidSizeQuantities()){
-      this.notificationService.showError('At least 1 product size should be selected.')
-      return;
-    }
-
-    const confirmation: boolean = confirm(`Are you sure you want to update ${this.currentProduct.productName}?`);
-
-    if(!confirmation)
-      return;
-
-
-    const sizeQuantityMap = this.selectedSizes.map(
-      size => ({
-        size,
-        quantity: this.sizeQuantities[size]
-      })
+    const confirmation: boolean = confirm(
+      `Are you sure you want to update ${this.currentProduct.productName}?`
     );
 
-    const formData: FormData = this.productService.createProductData(ngForm.value, this.currentProduct.categoryId, sizeQuantityMap, this.imageFiles);
+    if (!confirmation) return;
+  
+    const formData: FormData = this.productService.createProductData(
+      ngForm.value,
+      this.currentProduct.category.id,
+      this.selectedSizes.map(s => s.id),
+      this.imageFiles
+    );
 
-    this.productService.updateProduct(formData, this.currentProduct.id).subscribe({
-      next: (response: Product) => {
-        this.imageFiles = [];
-        this.selectedSizes = [];
-        this.correctImageSize = false;
-        this.notificationService.showSuccess(`${response.productName} was updated successfully.`);
-        this.router.navigateByUrl('/home');
-      },
-      error: (error: HttpErrorResponse) => {
-        this.imageFiles = [];
-        this.selectedSizes = [];
-        this.correctImageSize = false;
-        this.notificationService.showError(error.error.message);
-      }
-    });
+    this.spinnerService.show();
+    this.productService
+      .updateProduct(formData, this.currentProduct.id)
+      .subscribe({
+        next: (response: Product) => {
+          this.spinnerService.hide();
+          this.imageFiles = [];
+          this.selectedSizes = [];
+          this.correctImageSize = false;
+          this.notificationService.showSuccess(
+            `${response.productName} was updated successfully.`
+          );
+          this.router.navigateByUrl('/home');
+        },
+        error: (err: HttpErrorResponse) => {
+          this.spinnerService.hide();
+          this.imageFiles = [];
+          this.selectedSizes = [];
+          this.correctImageSize = false;
+          this.notificationService.showError(err.error.message);
+          console.error(err);
+        },
+      });
   }
 }

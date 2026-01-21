@@ -1,15 +1,15 @@
+import { Image } from "./image";
 import { Product } from "./Product";
-import { SizeQuantity } from "./size-quantity";
+import { Size } from "./size";
 
 export class CartItem {
     public id: number;
     public productName: string;
     public description: string;
-    public images: string[];
+    public images: Image[];
     public unitPrice: number;
-    public unitsInStock: number;
     public selectedSize: string;
-    public sizes: SizeQuantity[];
+    public sizes: Size[];
     public quantity: number;
 
     constructor(product: Product){
@@ -18,7 +18,6 @@ export class CartItem {
         this.description = product.description;
         this.images = product.images;
         this.unitPrice = product.unitPrice;
-        this.unitsInStock = product.unitsInStock;
         this.selectedSize = '';
         this.sizes = product.sizes;
         this.quantity = 1;

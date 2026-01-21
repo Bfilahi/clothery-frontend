@@ -1,6 +1,7 @@
 export class Hero {
     constructor(
-        public leftImage: string,
-        public rightImage: string
+        public id: string,
+        public leftImgUrl: string,
+        public rightImgUrl: string
     ){}
 }

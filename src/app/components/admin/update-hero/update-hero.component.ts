@@ -8,6 +8,7 @@ import { Hero } from '../../../model/hero';
 import { environment } from '../../../../environments/environment.development';
 import { NotificationService } from '../../../services/notification.service';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -34,6 +35,7 @@ export class UpdateHeroComponent {
     private utilityService: UtilityService,
     private httpClient: HttpClient,
     private notificationService: NotificationService,
+    private spinnerService: NgxSpinnerService,
     private router: Router
   ){}
 
@@ -66,14 +68,17 @@ export class UpdateHeroComponent {
   public onFormSubmit(){
     const formData: FormData = this.createData(this.leftImageFile!, this.rightImageFile!);
 
+    this.spinnerService.show();
     this.updateHero(formData).subscribe({
-      next: (response: Hero) => {
+      next: () => {
+        this.spinnerService.hide();
         this.leftImageFile = this.rightImageFile = null;
         this.correctLeftImageSize = this.correctRightImageSize = false;
-        this.notificationService.showSuccess(`${response.leftImage} and ${response.rightImage} were added successfully.`);
+        this.notificationService.showSuccess(`hero images were added successfully.`);
         this.router.navigateByUrl('/home');
       },
       error: (error: HttpErrorResponse) => {
+        this.spinnerService.hide();
         this.notificationService.showError(error.error.message);
         this.leftImageFile = this.rightImageFile = null;
         this.correctLeftImageSize = this.correctRightImageSize = false;

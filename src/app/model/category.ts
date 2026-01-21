@@ -4,6 +4,7 @@ export class Category{
         public categoryName: string,
         public type: string,
         public imgUrl: string,
+        public publicId: string,
         public gender: string
     ){}
 }

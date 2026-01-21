@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment.development';
 import { Hero } from '../../model/hero';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 
 
@@ -20,7 +20,7 @@ export class HomeComponent implements OnInit{
 
   private baseUrl: string = environment.BASE_URL;
   
-  buttons = [
+  public buttons = [
     {
       name: "SHOP MEN'S",
       gender: 'men'
@@ -31,9 +31,7 @@ export class HomeComponent implements OnInit{
     }
   ];
 
-  public heroImages!: Hero[];
-
-  public leftImage!: string ;
+  public leftImage: string = '';
   public rightImage!: string;
 
 
@@ -42,28 +40,16 @@ export class HomeComponent implements OnInit{
 
   public ngOnInit(): void {
     this.getHeroImages().subscribe(
-      (response: Hero[]) => {
-        this.heroImages = response;
-
-        if(this.heroImages.length > 0){
-          this.leftImage = this.heroImages[0].leftImage;
-          this.rightImage = this.heroImages[0].rightImage;
-        }
+      (response: Hero) => {
+        this.leftImage = response.leftImgUrl;
+        this.rightImage = response.rightImgUrl;
       }
     );
   }
 
-  private getHeroImages(): Observable<Hero[]>{
-    const url: string = `${this.baseUrl}/heroes`;
-    return this.httpClient.get<GetResponseHero>(url).pipe(
-      map(item => item._embedded.heroes)
-    );
+  private getHeroImages(): Observable<Hero>{
+    const url: string = `${this.baseUrl}/hero`;
+    return this.httpClient.get<Hero>(url);
   }
 
-}
-
-interface GetResponseHero{
-  _embedded: {
-    heroes: Hero[]
-  }
 }

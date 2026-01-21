@@ -7,6 +7,7 @@ import { NotificationService } from '../../../services/notification.service';
 import { Router } from '@angular/router';
 import { CategoryService } from '../../../services/category-service';
 import { UtilityService } from '../../../services/utility.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 
@@ -35,6 +36,7 @@ export class UpdateCategoryComponent implements OnInit{
     private categoryService: CategoryService,
     private notificationService: NotificationService,
     private utilityService: UtilityService,
+    private spinnerService: NgxSpinnerService,
     private router: Router
   ){}
 
@@ -82,18 +84,26 @@ export class UpdateCategoryComponent implements OnInit{
   public onUpdateCategory(ngForm: NgForm){
     const formData: FormData = this.categoryService.createCategoryData(ngForm.value, this.categoryImage!);
 
-    this.categoryService.updateCategory(formData).subscribe({
-      next: (response: Category) => {
-        this.categoryImage = null;
-        this.correctImageSize = false;
-        this.notificationService.showSuccess(`${response.categoryName} was added successfully.`);
-        this.router.navigateByUrl('/home');
-      },
-      error: (error: HttpErrorResponse) => {
-        this.notificationService.showError(error.error.message);
-        this.categoryImage = null;
-        this.correctImageSize = false;
-      }
-    })
+    this.spinnerService.show();
+    this.categoryService
+      .updateCategory(formData, this.currentCategory.id)
+      .subscribe({
+        next: (response: Category) => {
+          this.spinnerService.hide();
+          this.categoryImage = null;
+          this.correctImageSize = false;
+          this.notificationService.showSuccess(
+            `${response.categoryName} was added successfully.`
+          );
+          this.router.navigateByUrl('/home');
+        },
+        error: (err: HttpErrorResponse) => {
+          this.spinnerService.hide();
+          this.notificationService.showError(err.error.message);
+          this.categoryImage = null;
+          this.correctImageSize = false;
+          console.error(err);
+        },
+      });
   }
 }

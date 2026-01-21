@@ -1,55 +1,63 @@
 <div class="section__container" *ngIf="cartItems.length > 0">
-    <div class="left__content">
-        <ul class="products__wrapper">
-            <li class="product" *ngFor="let item of cartItems">
-                <div class="product__img">
-                    <img src="{{ item.images[0] }}" alt="">
-                </div>
-                
-                <div class="product__details">
-                    <p class="product__price">{{ item.unitPrice | currency: 'EUR' }}</p>
-                    <p class="product__description">{{ item.description }}</p>
+  <div class="left__content">
+    <ul class="products__wrapper">
+      <li class="product" *ngFor="let item of cartItems">
+        <div class="product__img">
+          <img [src]="item.images[0].imgUrl" alt="" />
+        </div>
 
-                    <div class="size-quantity">
-                        <div class="size">
-                            <label>Size </label>
-                            <select [(ngModel)]="item.selectedSize" (change)="onSizeChange(item)">
-                                <option value="{{ item.selectedSize }}">{{ item.selectedSize }}</option>
-                                <ng-container *ngFor="let size of item.sizes">
-                                    <option *ngIf="size.quantity > 0 && size.size != item.selectedSize" value="{{ size.size }}">
-                                        {{ size.size }}
-                                    </option>
-                                </ng-container>
-                            </select>
-                        </div>
-    
-                        <div class="quantity">
-                            <label>Qty. </label>
-                            <select [(ngModel)]="item.quantity" (change)="onQuantityChange(item)">
-                                <option *ngFor="let i of getAvailableQuantities(item)" value="{{ i }}">
-                                    {{ i }}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <button class="btn-remove" (click)="removeProduct(item)"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            </li>
-        </ul>
-    </div>
+        <div class="product__details">
+          <p class="product__price">{{ item.unitPrice | currency : "EUR" }}</p>
+          <p class="product__description">{{ item.description }}</p>
 
-    <div class="right__content">
-        <h3>TOTAL</h3>
-        <p class="total">
-            <span>Subtotal:</span>
-            <span>{{ totalPrice | currency: 'EUR' }}</span>
-        </p>
-        <button class="btn btn-purchase" (click)="checkout()">PURCHASE</button>
-    </div>
+          <div class="size-quantity">
+            <div class="size">
+              <label>Size </label>
+              <select
+                [(ngModel)]="item.selectedSize"
+                (change)="onSizeChange(item)"
+              >
+                <option [value]="item.selectedSize">
+                  {{ item.selectedSize }}
+                </option>
+                <ng-container *ngFor="let size of item.sizes">
+                  <option
+                    *ngIf="size.size != item.selectedSize"
+                    [value]="size.size"
+                  >
+                    {{ size.size }}
+                  </option>
+                </ng-container>
+              </select>
+            </div>
+
+            <div class="quantity">
+              <label>Qty. </label>
+              <button (click)="increaseQuantity(item)">+</button>
+              <span>{{ item.quantity }}</span>
+              <button (click)="decreaseQuantity(item)">-</button>
+            </div>
+          </div>
+
+          <button class="btn-remove" (click)="removeProduct(item)">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="right__content">
+    <h3>TOTAL</h3>
+    <p class="total__container">
+      <span>Subtotal:</span>
+      <span class="total">{{ totalPrice | currency : "EUR" }}</span>
+    </p>
+    <button class="btn btn-purchase" (click)="checkout()">PURCHASE</button>
+  </div>
 </div>
 
 <div class="empty" *ngIf="cartItems.length == 0">
-    <i class="fa-solid fa-briefcase"></i>
-    <p>Your cart is empty</p>
+  <i class="fa-solid fa-briefcase"></i>
+  <p>Your cart is empty</p>
 </div>

@@ -1,62 +1,65 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Category } from '../model/category';
 import { CustomHttpResponse } from '../model/custom-http-response';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CategoryService {
-
   private baseUrl: string = environment.BASE_URL;
   private adminUrl: string = environment.ADMIN_URL;
 
-  public categoryToUpdate: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  public categoryToUpdate: BehaviorSubject<any> = new BehaviorSubject<any>(
+    null
+  );
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
-  public getProductCategories(): Observable<Category[]>{
+  public getProductCategories(): Observable<Category[]> {
     const url: string = `${this.baseUrl}/categories`;
-
-    return this.httpClient.get<GetResponseProductCategory>(url).pipe(
-      map(item => item._embedded.categories)
-    );
+    return this.httpClient.get<Category[]>(url);
   }
 
-  public getCategoryId(categories: Category[], categoryName: string, categoryType: string, gender: string): number | undefined {
+  public getCategoryId(
+    categories: Category[],
+    categoryName: string,
+    categoryType: string,
+    gender: string
+  ): number | undefined {
     const targetedCategory: Category | undefined = categories.find(
-      category => category.categoryName === categoryName && 
-      category.type === categoryType && 
-      category.gender === gender
-    )
-    
-    if(targetedCategory)
-      return targetedCategory.id;
+      (category) =>
+        category.categoryName === categoryName &&
+        category.type === categoryType &&
+        category.gender === gender
+    );
+
+    if (targetedCategory) return targetedCategory.id;
     return undefined;
   }
 
-  public addCategory(formData: FormData): Observable<Category>{
+  public addCategory(formData: FormData): Observable<Category> {
     const url: string = `${this.adminUrl}/category/add`;
     return this.httpClient.post<Category>(url, formData);
   }
 
-  public deleteCategory(type: string, gender: string): Observable<CustomHttpResponse>{
-    const url: string = `${this.adminUrl}/category/${type}/${gender}`;
+  public deleteCategory(categoryId: number): Observable<CustomHttpResponse> {
+    const url: string = `${this.adminUrl}/category/${categoryId}`;
     return this.httpClient.delete<CustomHttpResponse>(url);
   }
 
-  public updateCategory(formData: FormData): Observable<Category>{
-    const url: string = `${this.adminUrl}/category/update`;
+  public updateCategory(formData: FormData, categoryId: number): Observable<Category> {
+    const url: string = `${this.adminUrl}/category/update/${categoryId}`;
     return this.httpClient.put<Category>(url, formData);
   }
 
-  public setCategoryToUpdate(category: Category){
+  public setCategoryToUpdate(category: Category) {
     this.categoryToUpdate.next(category);
   }
 
-  public createCategoryData(category: Category, image: File): FormData{
+  public createCategoryData(category: Category, image: File): FormData {
     const formData: FormData = new FormData();
 
     formData.append('categoryName', category.categoryName);
@@ -65,13 +68,5 @@ export class CategoryService {
     formData.append('gender', category.gender);
 
     return formData;
-  }
-
-}
-
-
-interface GetResponseProductCategory{
-  _embedded: {
-    categories: Category[]
   }
 }

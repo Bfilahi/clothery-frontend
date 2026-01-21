@@ -11,18 +11,14 @@ import { CategoryService } from '../../services/category-service';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { AuthRoleService } from '../../services/auth-role.service';
 
-
-
-
 @Component({
   selector: 'app-products',
   standalone: true,
   imports: [CommonModule, RouterModule, NgxSpinnerModule],
   templateUrl: './products.component.html',
-  styleUrl: './products.component.scss'
+  styleUrl: './products.component.scss',
 })
-export class ProductsComponent implements OnInit{
-
+export class ProductsComponent implements OnInit {
   public isAdmin: boolean = false;
 
   private AllCategories: Category[] = [];
@@ -36,7 +32,6 @@ export class ProductsComponent implements OnInit{
 
   public isLoading: boolean = false;
 
-
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
@@ -45,19 +40,17 @@ export class ProductsComponent implements OnInit{
     private notificationService: NotificationService,
     private spinnerService: NgxSpinnerService,
     private authRole: AuthRoleService
-  ){}
+  ) {}
 
   public ngOnInit(): void {
-    this.authRole.isAdmin$().subscribe(
-      response => this.isAdmin = response
-    );
-  
+    this.authRole.isAdmin$().subscribe((response) => (this.isAdmin = response));
+
     this.route.paramMap.subscribe({
       next: () => {
         this.spinnerService.show();
         this.isLoading = true;
         this.listProducts();
-      }
+      },
     });
 
     this.route.queryParamMap.subscribe({
@@ -65,63 +58,50 @@ export class ProductsComponent implements OnInit{
         this.spinnerService.show();
         this.isLoading = true;
         this.listProducts();
-      }
+      },
     });
   }
 
+  private listProducts() {
+    this.categoryService.getProductCategories().subscribe((response) => {
+      this.AllCategories = response;
+    });
 
-  private listProducts(){
-    this.categoryService.getProductCategories().subscribe(
-      response => this.AllCategories = response
-    );
-
-    if(this.route.snapshot.paramMap.has('keyword')){
+    if (this.route.snapshot.paramMap.has('keyword')) {
       this.showFilter = false;
 
       const keyword: string = this.route.snapshot.paramMap.get('keyword')!;
 
-      this.productService.searchProduct(keyword).subscribe(
-        response => {
-          this.AllProducts = response;
-          this.products = this.AllProducts;
+      this.productService.searchProduct(keyword).subscribe((response) => {
+        this.AllProducts = response;
+        this.products = this.AllProducts;
 
-          this.categories = this.AllCategories;
-
-          this.spinnerService.hide();
-          this.isLoading = false;
-        }
-      );
-    }
-    else if(this.route.snapshot.paramMap.has('gender')){
-      this.showFilter = true;
-      
-      const gender: string = this.route.snapshot.paramMap.get('gender')!;
-      let categoryGender: string = gender === 'men' ? 'M' : 'F';
-
-      if(this.route.snapshot.queryParamMap.has('ofs')){
-        this.selectedCategory = -2;
-        this.products = this.AllProducts.filter(p => p.unitsInStock === 0);
-        this.categories = this.AllCategories.filter(category => category.gender === categoryGender);
+        this.categories = this.AllCategories;
 
         this.spinnerService.hide();
         this.isLoading = false;
-      }
-      else if(this.route.snapshot.queryParamMap.has('id')){
+      });
+    } else if (this.route.snapshot.paramMap.has('gender')) {
+      this.showFilter = true;
+
+      const gender: string = this.route.snapshot.paramMap.get('gender')!;
+      let categoryGender: string = gender === 'men' ? 'M' : 'F';
+
+      if (this.route.snapshot.queryParamMap.has('id')) {
         const id: number = +this.route.snapshot.queryParamMap.get('id')!;
 
         this.selectedCategory = id;
 
-        this.productService.getProductsByCategory(id).subscribe(
-          response => {
-            this.products = response;
-            this.categories = this.AllCategories.filter(category => category.gender === categoryGender);
+        this.productService.getProductsByCategory(id).subscribe((response) => {
+          this.products = response;
+          this.categories = this.AllCategories.filter(
+            (category) => category.gender === categoryGender
+          );
 
-            this.spinnerService.hide();
-            this.isLoading = false;
-          }
-        );
-      }
-      else{
+          this.spinnerService.hide();
+          this.isLoading = false;
+        });
+      } else {
         const gender: string = this.route.snapshot.paramMap.get('gender')!;
 
         let categoryGender: string = gender === 'men' ? 'M' : 'F';
@@ -131,57 +111,64 @@ export class ProductsComponent implements OnInit{
           next: (response: Product[]) => {
             this.AllProducts = response;
             this.products = this.AllProducts;
-  
-            this.categories = this.AllCategories.filter(category => category.gender === categoryGender);
+
+            this.categories = this.AllCategories.filter(
+              (category) => category.gender === categoryGender
+            );
 
             this.spinnerService.hide();
             this.isLoading = false;
           },
-          error: (error: HttpErrorResponse) => {
-            this.notificationService.showError(error.error.message);
-          }
+          error: (err: HttpErrorResponse) => {
+            this.spinnerService.hide();
+            this.notificationService.showError(err.error.message);
+            console.error(err);
+          },
         });
       }
     }
   }
 
-  public onDelete(product: Product){
-    let confirmation: boolean = confirm(`Are you sure you want to delete: ${product.productName}?`);
+  public onDelete(product: Product) {
+    let confirmation: boolean = confirm(
+      `Are you sure you want to delete: ${product.productName}?`
+    );
 
-    if(!confirmation)
-      return;
+    if (!confirmation) return;
 
+    this.spinnerService.show();
     this.productService.deleteProduct(product.id).subscribe({
       next: (response: CustomHttpResponse) => {
-        this.notificationService.showSuccess(`${product.productName} ${response.message}`);
+        this.spinnerService.hide();
+        this.notificationService.showSuccess(
+          `${product.productName} ${response.message}`
+        );
         this.listProducts();
       },
       error: (error: CustomHttpResponse) => {
+        this.spinnerService.hide();
         this.notificationService.showError(error.message);
-      }
-    })
+      },
+    });
   }
 
-  public filterProducts(category: Category){
-    this.router.navigate([`/products/${category.gender === 'M' ? 'men' : 'women'}`], {queryParams: {id: category.id}});
-  }
-
-  public listAllProducts(){
-    if(this.route.snapshot.paramMap.get('gender')){
+  public listAllProducts() {
+    if (this.route.snapshot.paramMap.get('gender')) {
       const gender: string = this.route.snapshot.paramMap.get('gender')!;
       this.router.navigateByUrl(`/products/${gender}`);
     }
   }
 
-  public filterOutOfStock(){
+  public filterOutOfStock() {
     const gender: string = this.route.snapshot.paramMap.get('gender')!;
 
-    this.router.navigate([`/products/${gender}`], {queryParams: {ofs: 'out-of-stock'}});
+    this.router.navigate([`/products/${gender}`], {
+      queryParams: { ofs: 'out-of-stock' },
+    });
   }
 
-  public goToUpdate(product: Product){
+  public goToUpdate(product: Product) {
     this.productService.setProductToUpdate(product);
     this.router.navigateByUrl(`/admin/update-product/${product.id}`);
   }
-
 }

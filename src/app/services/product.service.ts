@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Product } from '../model/Product';
 import { CustomHttpResponse } from '../model/custom-http-response';
+import { Size } from '../model/size';
 
 
 @Injectable({
@@ -70,18 +71,32 @@ export class ProductService {
     this.productToUpdate.next(product);
   }
 
+  public addSize(size: string): Observable<Size>{
+    const url: string = `${this.adminUrl}/size/add`;
+    return this.httpClient.post<Size>(url, size);
+  }
 
-  public createProductData(product: Product, categoryId: number, sizes: any, images: File[]): FormData{
+  public deleteSize(sizeId: number): Observable<void>{
+    const url: string = `${this.adminUrl}/size/${sizeId}`;
+    return this.httpClient.delete<void>(url);
+  }
+
+  public getSizes(): Observable<Size[]>{
+    const url: string = `${this.adminUrl}/sizes`;
+    return this.httpClient.get<Size[]>(url);
+  }
+
+  public createProductData(product: Product, categoryId: number, sizeIds: number[], images: File[]): FormData{
     const formData: FormData = new FormData();
 
     formData.append('productName', product.productName);
     formData.append('description', product.description);
     formData.append('price', product.unitPrice.toString());
+    formData.append('unitsInStock', product.unitsInStock.toString());
     formData.append('categoryId', categoryId.toString());
 
-    formData.append('sizes', JSON.stringify(sizes));
-
-    images.forEach(file => formData.append('image', file));
+    sizeIds.forEach(s => formData.append('sizeIds', s.toString()));
+    images.forEach(file => formData.append('images', file));
 
     return formData;
   }

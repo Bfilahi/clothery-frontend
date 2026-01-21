@@ -9,100 +9,85 @@ import { StripeResponse } from '../../../interface/stripe-response';
 import { AuthService } from '@auth0/auth0-angular';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'app-cart-details',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './cart-details.component.html',
-  styleUrl: './cart-details.component.scss'
+  styleUrl: './cart-details.component.scss',
 })
 export class CartDetailsComponent {
-
   public totalPrice: number = 0;
-  public totalQuantity: number = 0;
   public cartItems: CartItem[] = [];
 
   private isAuthenticated: boolean = false;
-
 
   constructor(
     private cartService: CartService,
     private paymentService: PaymentService,
     private authService: AuthService,
     private router: Router
-  ){}
+  ) {}
 
   ngOnInit(): void {
     this.updateCartDetails();
 
     this.authService.isAuthenticated$.subscribe(
-      response => this.isAuthenticated = response
+      (response) => (this.isAuthenticated = response)
     );
   }
 
-
-  private updateCartDetails(){
+  private updateCartDetails() {
     this.cartService.totalPrice.subscribe(
-      response => this.totalPrice = response
-    );
-
-    this.cartService.totalQuantity.subscribe(
-      response => this.totalQuantity = response
+      (response) => (this.totalPrice = response)
     );
 
     this.cartService.cartItems$.subscribe(
-      response => this.cartItems = response
+      (response) => (this.cartItems = response)
     );
   }
 
-  public onSizeChange(item: CartItem){
+  public onSizeChange(item: CartItem) {
     item.quantity = 1;
   }
 
-  public onQuantityChange(item: CartItem){
-    item.quantity = Number(item.quantity);
-
+  public increaseQuantity(item: CartItem) {
+    item.quantity++;
     this.recalculateTotal();
   }
 
-  public getAvailableQuantities(item: CartItem): number[]{
-    const selectedSize = item.sizes.find(sq => sq.size === item.selectedSize);
-
-    if(selectedSize)
-      return Array.from({length: selectedSize.quantity}, (_, i) => i + 1);
-
-    return [];
+  public decreaseQuantity(item: CartItem) {
+    item.quantity--;
+    if (item.quantity == 0) {
+      this.removeProduct(item);
+    }
+    this.recalculateTotal();
   }
 
-  private recalculateTotal(){
+  private recalculateTotal() {
     this.cartService.computeCartTotals();
   }
 
-  public removeProduct(item: CartItem){
+  public removeProduct(item: CartItem) {
     this.cartService.removeFromCart(item);
   }
-
 
   public checkout() {
     if (!this.isAuthenticated) {
       // If not authenticated, redirect to login first
       this.authService.loginWithRedirect({
-        appState: { target: '/cart-details' } // Redirect back to cart after login
+        appState: { target: '/cart-details' }, // Redirect back to cart after login
       });
       return;
     }
 
+    if (this.cartItems.length === 0) return;
 
-    if(this.cartItems.length === 0)
-      return;
-    
-    
     let cart: PaymentRequest = {
-      lineItems: []
+      lineItems: [],
     };
 
-    for(let item of this.cartItems){
+    for (let item of this.cartItems) {
       cart.lineItems.push({
         name: item.productName,
         description: item.description,
@@ -111,19 +96,15 @@ export class CartDetailsComponent {
       });
     }
 
-  
     this.paymentService.checkout(cart).subscribe({
-      
       next: (response: StripeResponse) => {
         if (response.status === 'SUCCESS')
           window.location.href = response.sessionUrl;
-        else 
-          console.error('Payment initialization failed');
+        else console.error('Payment initialization failed');
       },
       error: (err) => {
         console.error('Payment error', err);
-      }
+      },
     });
   }
-
 }
