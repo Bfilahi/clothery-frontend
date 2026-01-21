@@ -2,6 +2,13 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.5.
 
+## Demos
+
+![clothery_cart](https://github.com/user-attachments/assets/d584b2e7-4409-4d72-b839-18aed9902db6)
+
+![clothery_admin](https://github.com/user-attachments/assets/f530234b-dc78-4b7a-bf0d-d9f2a6b8b990)
+
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
