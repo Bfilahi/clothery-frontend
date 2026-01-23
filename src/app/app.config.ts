@@ -8,6 +8,7 @@ import { provideToastr } from 'ngx-toastr';
 
 import { provideAuth0 } from '@auth0/auth0-angular';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
+import { environment } from '../environments/environment.development';
 
 
 
@@ -20,13 +21,13 @@ export const appConfig: ApplicationConfig = {
     provideToastr(),
 
     provideAuth0({
-      domain: 'dev-whcz4g0gwv3v4vle.eu.auth0.com',
-      clientId: 'BlDvveqd10pHrHAYMfuC4ejwFsFixniW',
+      domain: environment.OKTA_DOMAIN,
+      clientId: environment.OKTA_CLIENT_ID,
       useRefreshTokens: true,
       cacheLocation: 'localstorage',
       authorizationParams: {
         redirect_uri: window.location.origin,
-        audience: 'https://clothery-app',
+		audience: environment.OKTA_AUDIENCE,
         scope: 'openid profile email'
       }
     }),
