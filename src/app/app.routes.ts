@@ -104,7 +104,7 @@ export const routes: Routes = [
     {
         path: '**',
         loadComponent: () => import('./components/static-pages/page-not-found/page-not-found.component').then(m => m.PageNotFoundComponent)
-    }
+    },
 
     {path: '', redirectTo: '/home', pathMatch: 'full'},
 
