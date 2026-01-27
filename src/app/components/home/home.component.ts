@@ -2,10 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ProductCategoryComponent } from "../product-category/product-category.component";
 import { RouterModule } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment.development';
 import { Hero } from '../../model/hero';
 import { Observable } from 'rxjs';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 
 
 
@@ -35,16 +37,22 @@ export class HomeComponent implements OnInit{
   public rightImage!: string;
 
 
-  constructor(private httpClient: HttpClient){}
+  constructor(private httpClient: HttpClient, private spinnerService: NgxSpinnerService){}
 
 
   public ngOnInit(): void {
-    this.getHeroImages().subscribe(
-      (response: Hero) => {
+    this.spinnerService.show();
+    this.getHeroImages().subscribe({
+      next: (response: Hero) => {
         this.leftImage = response.leftImgUrl;
         this.rightImage = response.rightImgUrl;
-      }
-    );
+        this.spinnerService.hide();
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error(err);
+        this.spinnerService.hide();
+      },
+    });
   }
 
   private getHeroImages(): Observable<Hero>{
